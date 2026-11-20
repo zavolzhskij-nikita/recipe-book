@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ recipe.title }}</h1>
+<p style="color:#666;margin-bottom:16px;">Автор: {{ recipe.author.username }}</p>
+<p>{{ recipe.description }}</p>
+<h2>Ингредиенты</h2>
+<p>{{ recipe.ingredients|linebreaks }}</p>
+<h2>Приготовление</h2>
+<p>{{ recipe.steps|linebreaks }}</p>
+{% if user.is_authenticated %}
+<form method="post" action="/recipes/{{ recipe.id }}/favorite/" style="margin-top:20px;">
+  {% csrf_token %}
+  <button class="btn" type="submit">⭐ В избранное / из избранного</button>
+</form>
+{% endif %}
+{% endblock %}

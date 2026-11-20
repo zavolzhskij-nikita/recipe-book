@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Все рецепты</h1>
+<form method="get" class="search">
+  <input type="text" name="q" placeholder="Поиск по названию..." value="{{ q }}">
+  <button class="btn" type="submit">Найти</button>
+</form>
+<div class="grid">
+  {% for r in recipes %}
+  <div class="card">
+    <h3>{{ r.title }}</h3>
+    <p>{{ r.description|truncatewords:15 }}</p>
+    <a href="/recipes/{{ r.id }}/" class="btn">Открыть</a>
+  </div>
+  {% empty %}
+  <p>Ничего не найдено.</p>
+  {% endfor %}
+</div>
+{% endblock %}

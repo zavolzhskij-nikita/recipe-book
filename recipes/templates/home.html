@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Свежие рецепты</h1>
+<div class="grid">
+  {% for r in recipes %}
+  <div class="card">
+    <h3>{{ r.title }}</h3>
+    <p>{{ r.description|truncatewords:15 }}</p>
+    <a href="/recipes/{{ r.id }}/" class="btn">Открыть</a>
+  </div>
+  {% empty %}
+  <p>Пока нет рецептов.</p>
+  {% endfor %}
+</div>
+{% endblock %}

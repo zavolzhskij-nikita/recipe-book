@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Профиль: {{ user.username }}</h1>
+<h2>Мои рецепты ({{ my_recipes|length }})</h2>
+<div class="grid">
+  {% for r in my_recipes %}
+  <div class="card"><h3>{{ r.title }}</h3><a href="/recipes/{{ r.id }}/" class="btn">Открыть</a></div>
+  {% empty %}<p>Вы ещё не добавляли рецепты.</p>{% endfor %}
+</div>
+<h2>Избранное ({{ favorites|length }})</h2>
+<div class="grid">
+  {% for r in favorites %}
+  <div class="card"><h3>{{ r.title }}</h3><a href="/recipes/{{ r.id }}/" class="btn">Открыть</a></div>
+  {% empty %}<p>Пусто.</p>{% endfor %}
+</div>
+{% endblock %}
