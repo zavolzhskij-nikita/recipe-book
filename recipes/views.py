@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from .models import Recipe
+from django.db.models import Q
 
 def home(request):
     recipes = Recipe.objects.order_by('-created_at')[:6]
@@ -10,9 +11,15 @@ def home(request):
 
 def recipe_list(request):
     q = request.GET.get('q', '')
-    recipes = Recipe.objects.all()
+    recipes = list(Recipe.objects.all())
     if q:
-        recipes = recipes.filter(title__icontains=q)
+        q_lower = q.lower()
+        recipes = [
+            r for r in recipes
+            if q_lower in r.title.lower()
+            or q_lower in r.description.lower()
+            or q_lower in r.ingredients.lower()
+        ]
     return render(request, 'recipe_list.html', {'recipes': recipes, 'q': q})
 
 def recipe_detail(request, pk):
@@ -39,7 +46,8 @@ def toggle_favorite(request, pk):
         recipe.favorites.remove(request.user)
     else:
         recipe.favorites.add(request.user)
-    return redirect('recipe_detail', pk=pk)
+    # вернуться туда, откуда пришёл (профиль или карточка)
+    return redirect(request.META.get('HTTP_REFERER', 'recipe_detail'))
 
 @login_required
 def profile(request):

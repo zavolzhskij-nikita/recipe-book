@@ -10,7 +10,17 @@
 <h2>Избранное ({{ favorites|length }})</h2>
 <div class="grid">
   {% for r in favorites %}
-  <div class="card"><h3>{{ r.title }}</h3><a href="/recipes/{{ r.id }}/" class="btn">Открыть</a></div>
-  {% empty %}<p>Пусто.</p>{% endfor %}
+  <div class="card">
+    <h3>{{ r.title }}</h3>
+    <p>{{ r.description|truncatewords:10 }}</p>
+    <a href="{% url 'recipe_detail' r.id %}" class="btn">Открыть</a>
+    <form method="post" action="{% url 'toggle_favorite' r.id %}" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn" style="background:#888;">Убрать</button>
+    </form>
+  </div>
+  {% empty %}
+  <p>Пусто.</p>
+  {% endfor %}
 </div>
 {% endblock %}

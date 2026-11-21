@@ -7,10 +7,15 @@
 <p>{{ recipe.ingredients|linebreaks }}</p>
 <h2>Приготовление</h2>
 <p>{{ recipe.steps|linebreaks }}</p>
-{% if user.is_authenticated %}
-<form method="post" action="/recipes/{{ recipe.id }}/favorite/" style="margin-top:20px;">
+
+<form method="post" action="{% url 'toggle_favorite' recipe.id %}" style="margin-top:20px;">
   {% csrf_token %}
-  <button class="btn" type="submit">⭐ В избранное / из избранного</button>
+  {% if user.is_authenticated %}
+    <button class="btn" type="submit">
+      {% if user in recipe.favorites.all %}★ Убрать из избранного{% else %}☆ В избранное{% endif %}
+    </button>
+  {% else %}
+    <a href="{% url 'login' %}?next={% url 'recipe_detail' recipe.id %}" class="btn">☆ В избранное (войдите)</a>
+  {% endif %}
 </form>
-{% endif %}
 {% endblock %}
