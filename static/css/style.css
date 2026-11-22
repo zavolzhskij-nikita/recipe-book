@@ -192,3 +192,47 @@ footer {
   .search { flex-direction: column; }
   .search .btn { width: 100%; }
 }
+
+@media (max-width: 600px) {
+  /* Сетка карточек в 1 колонку */
+  .grid { grid-template-columns: 1fr; }
+  
+  /* Контейнер чуть меньше */
+  .container { padding: 24px 16px; }
+  
+  /* Заголовки меньше */
+  h1 { font-size: 28px; }
+  
+  /* === МОБИЛЬНАЯ ШАПКА === */
+  header {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  header .logo {
+    font-size: 22px;
+  }
+
+  header nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px 16px;
+    width: 100%;
+  }
+
+  header nav a, 
+  header nav button {
+    font-size: 15px;
+  }
+
+  /* Кнопка "Добавить рецепт" на мобильном на всю ширину */
+  header nav .btn-add {
+    width: 100%;
+    text-align: center;
+    padding: 10px 16px;
+    margin: 4px 0;
+  }
+}

@@ -48,24 +48,27 @@
     </div>
   </div>
 
-  <!-- Кнопка избранного -->
-  <div style="padding-top: 24px; border-top: 1px solid var(--border-color);">
-    <form method="post" action="{% url 'toggle_favorite' recipe.id %}">
-      {% csrf_token %}
-      {% if user.is_authenticated %}
-        <button class="btn" type="submit" style="width: auto; padding: 12px 32px;">
-          {% if user in recipe.favorites.all %}★ Убрать из избранного{% else %}☆ В избранное{% endif %}
-        </button>
-      {% else %}
-        <a href="{% url 'login' %}?next={% url 'recipe_detail' recipe.id %}" class="btn" style="width: auto; padding: 12px 32px;">☆ В избранное (войдите)</a>
-      {% endif %}
+  <!-- Кнопки внизу страницы -->
+<div style="padding-top: 24px; border-top: 1px solid var(--border-color); display: flex; gap: 16px; flex-wrap: wrap;">
+  
+  <!-- Избранное -->
+  <form method="post" action="{% url 'toggle_favorite' recipe.id %}" style="margin: 0; flex: 1; min-width: 200px;">
+    {% csrf_token %}
+    {% if user.is_authenticated %}
+      <button class="btn" type="submit" style="width: 100%; padding: 12px 16px;">
+        {% if user in recipe.favorites.all %}★ Убрать из избранного{% else %}☆ В избранное{% endif %}
+      </button>
+    {% else %}
+      <a href="{% url 'login' %}?next={% url 'recipe_detail' recipe.id %}" class="btn" style="width: 100%; padding: 12px 16px;">☆ В избранное (войдите)</a>
+    {% endif %}
+  </form>
 
-      <!-- Кнопка редактирования (только для автора) -->
-      {% if user == recipe.author %}
-        <a href="{% url 'recipe_edit' recipe.id %}?next={% if request.GET.next == '/profile/' %}{% url 'profile' %}{% else %}{% url 'recipe_detail' recipe.id %}{% endif %}" class="btn btn-secondary" style="width: auto; padding: 12px 32px; background: #7a736a;">Редактировать рецепт</a>
-      {% endif %}
-    </form>
-  </div>
+  <!-- Кнопка редактирования (только для автора) -->
+  {% if user == recipe.author %}
+    <a href="{% url 'recipe_edit' recipe.id %}?next={% if request.GET.next == '/profile/' %}{% url 'profile' %}{% else %}{% url 'recipe_detail' recipe.id %}{% endif %}" class="btn btn-secondary" style="flex: 1; min-width: 200px; padding: 12px 16px; background: #7a736a;">Редактировать рецепт</a>
+  {% endif %}
+
+</div>
 
 </div>
 
