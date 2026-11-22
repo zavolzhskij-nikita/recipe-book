@@ -1,12 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Новый рецепт</h1>
-<form method="post">
+<h1>{% if recipe %}Редактировать рецепт{% else %}Новый рецепт{% endif %}</h1>
+<form method="post" style="max-width: 600px; margin: 0 auto;">
   {% csrf_token %}
-  <input name="title" placeholder="Название" required>
-  <input name="description" placeholder="Краткое описание" required>
-  <textarea name="ingredients" placeholder="Ингредиенты" rows="5" required></textarea>
-  <textarea name="steps" placeholder="Шаги приготовления" rows="8" required></textarea>
-  <button class="btn" type="submit">Сохранить</button>
+  
+  <input name="title" placeholder="Название" required value="{{ recipe.title|default:'' }}">
+  <input name="description" placeholder="Краткое описание" required value="{{ recipe.description|default:'' }}">
+  <input name="image_url" placeholder="Ссылка на фото (необязательно)" value="{{ recipe.image_url|default:'' }}">
+  
+  <textarea name="ingredients" placeholder="Ингредиенты" rows="5" required>{{ recipe.ingredients|default:'' }}</textarea>
+  <textarea name="steps" placeholder="Шаги приготовления" rows="8" required>{{ recipe.steps|default:'' }}</textarea>
+  
+  <div style="display: flex; gap: 16px; align-items: center; margin-top: 8px;">
+    <button class="btn" type="submit" style="width: auto;">{% if recipe %}Сохранить изменения{% else %}Сохранить{% endif %}</button>
+    
+    <!-- Умная кнопка Отмена -->
+    <a href="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'recipe_list' %}{% endif %}" style="color: var(--text-muted); font-weight: 500;">
+      Отмена
+    </a>
+  </div>
 </form>
 {% endblock %}

@@ -27,12 +27,37 @@ def recipe_detail(request, pk):
     return render(request, 'recipe_detail.html', {'recipe': recipe})
 
 @login_required
+@login_required
+def recipe_edit(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk)
+    if recipe.author != request.user:
+        return redirect('recipe_detail', pk=recipe.pk)
+
+    if request.method == 'POST':
+        recipe.title = request.POST['title']
+        recipe.description = request.POST['description']
+        recipe.image_url = request.POST.get('image_url', '')
+        recipe.ingredients = request.POST['ingredients']
+        recipe.steps = request.POST['steps']
+        recipe.save()
+        
+        # Возврат туда, откуда пришли
+        next_url = request.GET.get('next')
+        if next_url == '/profile/':
+            return redirect('profile')
+        return redirect('recipe_detail', pk=recipe.pk)
+        
+    return render(request, 'recipe_form.html', {'recipe': recipe})
+
+
+@login_required
 def recipe_add(request):
     if request.method == 'POST':
         Recipe.objects.create(
             author=request.user,
             title=request.POST['title'],
             description=request.POST['description'],
+            image_url=request.POST.get('image_url', ''), # <- добавили
             ingredients=request.POST['ingredients'],
             steps=request.POST['steps'],
         )

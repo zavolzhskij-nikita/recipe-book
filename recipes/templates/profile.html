@@ -4,20 +4,32 @@
 <h2>Мои рецепты ({{ my_recipes|length }})</h2>
 <div class="grid">
   {% for r in my_recipes %}
-  <div class="card"><h3>{{ r.title }}</h3><a href="/recipes/{{ r.id }}/" class="btn">Открыть</a></div>
-  {% empty %}<p>Вы ещё не добавляли рецепты.</p>{% endfor %}
+  <div class="card" style="padding: 16px;">
+    <h3 style="font-size: 18px; margin-bottom: 8px;">{{ r.title }}</h3>
+    <div style="display: flex; gap: 8px; margin-top: auto;">
+      <a href="{% url 'recipe_detail' r.id %}?next={% url 'profile' %}" class="btn" style="flex: 1; padding: 8px 12px; font-size: 14px; border-radius: 6px;">Открыть</a>
+      <a href="{% url 'recipe_edit' r.id %}?next={% url 'profile' %}" class="btn btn-secondary" style="padding: 8px 12px; font-size: 14px; border-radius: 6px;" title="Редактировать">✎</a>
+    </div>
+  </div>
+  {% empty %}
+  <p>Вы ещё не добавляли рецепты.</p>
+  {% endfor %}
 </div>
 <h2>Избранное ({{ favorites|length }})</h2>
 <div class="grid">
   {% for r in favorites %}
-  <div class="card">
-    <h3>{{ r.title }}</h3>
-    <p>{{ r.description|truncatewords:10 }}</p>
-    <a href="{% url 'recipe_detail' r.id %}" class="btn">Открыть</a>
-    <form method="post" action="{% url 'toggle_favorite' r.id %}" style="display:inline;">
-      {% csrf_token %}
-      <button type="submit" class="btn" style="background:#888;">Убрать</button>
-    </form>
+  <div class="card" style="padding: 16px;">
+    <h3 style="font-size: 18px; margin-bottom: 8px;">{{ r.title }}</h3>
+    <p style="font-size: 13px; margin-bottom: 16px;">{{ r.description|truncatewords:10 }}</p>
+    
+    <div style="display: flex; gap: 8px; margin-top: auto;">
+      <a href="{% url 'recipe_detail' r.id %}?next={% url 'profile' %}" class="btn" style="flex: 1; padding: 8px 12px; font-size: 14px; border-radius: 6px;">Открыть</a>
+      
+      <form method="post" action="{% url 'toggle_favorite' r.id %}" style="margin: 0;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-secondary" style="padding: 8px 12px; font-size: 14px; border-radius: 6px;" title="Убрать из избранного">✕</button>
+      </form>
+    </div>
   </div>
   {% empty %}
   <p>Пусто.</p>
